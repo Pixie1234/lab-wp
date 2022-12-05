@@ -1,0 +1,68 @@
+<div class="container" xmlns:th="http://www.thymeleaf.org">
+
+        <section class="jumbotron text-center">
+            <div class="container">
+                <h1 class="jumbotron-heading">WEB PROGRAMMING SHOP</h1>
+                <h3 class="jumbotron-heading">All balloons</h3>
+            </div>
+        </section>
+    <div class="container mb-4">
+            <div class="row">
+                <div class="col-12" th:if="${balloons.size() > 0}">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Balloon name</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Manufacturer</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="balloon : ${balloons}" class="balloon">
+                                <td th:text="${balloon.getName()}"></td>
+                                <td th:text="${balloon.getDescription()}"></td>
+                                <td th:text="${balloon.getManufacturer() != null}
+                                ? ${balloon.getManufacturer().getName()} : 'No Manufacturer'"></td>
+
+                                <td class="text-right">
+                                    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                        <form th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}" th:method="DELETE">
+                                            <button type="submit" class="btn btn-sm btn-danger delete-balloon"><i class="fa fa-trash">Delete</i></button>
+                                        </form>
+                                    </th:block>
+                                    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                        <a th:href="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}"
+                                           class="btn btn-sm btn-info edit-balloon"><i class="fa fa-trash">Edit</i></a>
+                                    </th:block>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col mb-3">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a href="/balloons/add-form" class="btn btn-block btn-dark  add-balloon-btn">Add new balloon</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Choose balloon color:</h2>
+        <form th:action="@{/balloons}" th:method="POST">
+            <input type="radio" name="color" value="Red Balloon"/> Red Balloon<br/>
+            <input type="radio" name="color" value="Green Balloon"/> Green Balloon<br/>
+            <input type="radio" name="color" value="Yellow Balloon"/> Yellow Balloon<br/>
+            <input type="radio" name="color" value="Blue Balloon"/> Blue Balloon<br/>
+
+            <br/>
+
+            <input type="submit" value="Submit"/>
+        </form>
+
+</div>
+
